@@ -17,7 +17,7 @@ import java.util.Stack;
     7：图形界面：（Gui的复习）每个学期选择感兴趣的课程以及输入喜爱值、想后移课程、每个学期的学分限制，显示此学期的编排计划。
          每个学期均选择完毕后显示一个完整的课表。
     8：错误提示：选课太少，修不够学分。
-    9：图形界面设计：
+    图形界面设计：
  */
 public class graph {
     private vertex[] vertexArray;//vertex类型的顺序表
