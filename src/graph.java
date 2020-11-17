@@ -1,10 +1,10 @@
 import java.util.Stack;
 /*
-    ：实现形成不同学期的课程计划：
+    1：实现形成不同学期的课程计划：
           在每一学期把当前图中入度为0的课程压入zeroStack，不断删除此栈的结点代表为本学期选课。将新产生入度为0的课程压入辅助栈，
         以备下学期选课。本学期选课结束后，将辅助栈的课程压入zeroStack，供下一学期的选课。循环实现，直到两栈均为空或者学分修够结束。
         （基本思想）
-    ：限制每学期的学分总数：
+    2：限制每学期的学分总数：
           课程类（vertex）设有学分属性。在每学期pop栈zeroStack时，判断本学期学分是否修满，若修满，停止pop。
     3：某门课的后移：
           在zeroStack里寻找要后移的课程，当要pop此课程时，用个临时变量存储此课程信息，正常继续pop。把辅助栈里的课程pop到
@@ -23,10 +23,10 @@ public class graph {
     private vertex[] vertexArray;//vertex类型的顺序表
     private int Vnumber;//顶点数量
     private int position;//vertexArray里真正存入的课程数。
-    private Stack<vertex> zeroStack;//存放当前入度为0的课程，该栈内的课程即为本学期能选的课程
+    /*private Stack<vertex> zeroStack;//存放当前入度为0的课程，该栈内的课程即为本学期能选的课程
     private Stack<vertex> helpStack;//辅助栈
     private vertex[] helpList=new vertex[20];//为了后调课程以及挑选喜爱课程而设置的顺序表，将被调课程或者普通课程压入helpStack,该表存zeroStack中未被后调的结点。
-    private vertex[] helpLikeList=new vertex[20];//将喜爱的课程放入此表，然后按喜爱值再压入zeroStack。
+    private vertex[] helpLikeList=new vertex[20];//将喜爱的课程放入此表，然后按喜爱值再压入zeroStack。*/
     private int gradeLimit;
     //构造方法
     public graph(int number){
@@ -34,7 +34,35 @@ public class graph {
         vertexArray=new vertex[number];
         position=0;
     }
-    //为图增加边，创建结点对象,并搭建邻接表和逆邻接表；
+    //vertexArray添加
+    public void vertexArrayAdd(vertex a){
+        if (position==0) {
+            vertexArray[0] =a;
+            position++;
+        }
+        int i;
+        for(i=0;i<position;i++){
+            if(a.getCurname()==vertexArray[i].getCurname())
+                break;
+        }
+        if(i==position){
+            vertexArray[position]=a;
+        }
+    }
+    //初始化vertexArray,建立邻接链表和逆邻接链表
+    public void addEdge(String formmer,int grade1,String latter,int grade2){
+        vertex v1=new vertex(formmer,grade1);
+        vertex v2=new vertex(latter,grade2);
+        vertexLinknode v3= new vertexLinknode(v1);
+        vertexLinknode v4= new vertexLinknode(v2);
+        vertexArrayAdd(v1);
+        vertexArrayAdd(v2);
+        v4.nextLinknode=StringToVetex(formmer).nextNode;
+        StringToVetex(formmer).nextNode=v4;
+        v3.preLinknode=StringToVetex(latter).preNode;
+        StringToVetex(latter).preNode=v3;
+    }
+   /* //为图增加边，创建结点对象,并搭建邻接表和逆邻接表；
     public void addEdge(String formmer,int grade1,String latter,int grade2){
         vertex v1=new vertex(formmer,grade1);
         vertex v2=new vertex(latter,grade2);
@@ -62,33 +90,32 @@ public class graph {
         if(j==position){
             vertexArray[position]=v2;
         }
-    }
+    }*/
     //利用逆邻接表计算每个点的入度。
     public void indegreeCalculate(){
         for(vertex x:vertexArray){
-            vertex a;
-            a=x;
-            while(a.preNode!=null){
-                a=a.preNode;
+            vertexLinknode a=x.preNode;
+
+            while(a!=null){
                 x.indegree++;
+                a=a.preLinknode;
             }
         }
     }
     //删除结点，将其结点入度设为0，并把其邻接表上的结点入度减一。
     public void deleteVertex(vertex x){
         x.indegree=-1;
-        vertex a=x;
-        while(a.nextNode!=null){
-            a=a.nextNode;
-            a.indegree--;
+        vertexLinknode a=x.nextNode;
+        while(a!=null){
+            StringToVetex(a.getName()).indegree--;
+            a=a.nextLinknode;
         }
         //删除结点。
-        x.nextNode.preNode=null;
-        x.nextNode=null;
+        x.nextNode=null;//删除节点的过程只改变了邻接表，未改变更新逆邻接表，但是更新了入度
         Vnumber--;
     }
     //后调课程
-    public void shiftBackCurriculum(String curriculum){
+    /*public void shiftBackCurriculum(String curriculum){
         vertex x=StringToVetex(curriculum);
         int i=0;
         while(zeroStack.peek()!=x){
@@ -100,12 +127,12 @@ public class graph {
         for(int a=i;a<=1;a--){
             zeroStack.push(helpList[a]);
         }
-    }
+    }*/
     //设置喜爱值
     public void setFavorate(String curriculum,int l){
         StringToVetex(curriculum).setFavorate(l);
     }
-    //拓扑排序前的准备，将刚开始入度为0的结点压入zeroStack.
+   /* //拓扑排序前的准备，将刚开始入度为0的结点压入zeroStack.
     public void PreTypo() {
         for (vertex x : vertexArray) {
             if (x.indegree == 0)
@@ -167,7 +194,7 @@ public class graph {
         //递归调用。
         typo();
 
-    }
+    }*/
 
      //根据课程名字返回相应的vertex结点。
     public vertex StringToVetex(String s){
@@ -187,13 +214,13 @@ public class graph {
         return Vnumber;
     }
 
-    public Stack<vertex> getHelpStack() {
+   /* public Stack<vertex> getHelpStack() {
         return helpStack;
     }
 
     public Stack<vertex> getZeroStack() {
         return zeroStack;
-    }
+    }*/
 
     public void setVnumber(int vnumber) {
         Vnumber = vnumber;
