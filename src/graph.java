@@ -1,4 +1,4 @@
-import java.util.Stack;
+import java.util.*;
 /*
     1：实现形成不同学期的课程计划：
           在每一学期把当前图中入度为0的课程压入zeroStack，不断删除此栈的结点代表为本学期选课。将新产生入度为0的课程压入辅助栈，
@@ -20,14 +20,15 @@ import java.util.Stack;
     9.图形界面设计：
  */
 public class graph {
-    private vertex[] vertexArray;//vertex类型的顺序表
+    private vertex[] vertexArray=new vertex[100];//vertex类型的顺序表
     private int Vnumber;//顶点数量
     private int position;//vertexArray里真正存入的课程数。
     /*private Stack<vertex> zeroStack;//存放当前入度为0的课程，该栈内的课程即为本学期能选的课程
     private Stack<vertex> helpStack;//辅助栈
     private vertex[] helpList=new vertex[20];//为了后调课程以及挑选喜爱课程而设置的顺序表，将被调课程或者普通课程压入helpStack,该表存zeroStack中未被后调的结点。
     private vertex[] helpLikeList=new vertex[20];//将喜爱的课程放入此表，然后按喜爱值再压入zeroStack。*/
-    private int gradeLimit;
+    private int timeLimit=280;
+    private int timeNow=0;
     //构造方法
     public graph(int number){
         Vnumber=number;
@@ -62,35 +63,7 @@ public class graph {
         v3.preLinknode=StringToVetex(latter).preNode;
         StringToVetex(latter).preNode=v3;
     }
-   /* //为图增加边，创建结点对象,并搭建邻接表和逆邻接表；
-    public void addEdge(String formmer,int grade1,String latter,int grade2){
-        vertex v1=new vertex(formmer,grade1);
-        vertex v2=new vertex(latter,grade2);
-        v2.nextNode=v1.nextNode;
-        v1.nextNode=v2;
-        v1.preNode=v2.preNode;
-        v2.preNode=v1;
-        if (position==0) {
-            vertexArray[0] = v1;
-            position++;
-        }
-        int i;
-        for(i=0;i<position;i++){
-            if(v1.getCurname()==vertexArray[i].getCurname())
-                break;
-        }
-        if(i==position){
-            vertexArray[position]=v1;
-        }
-        int j;
-        for(j=0;j<position;j++){
-            if(v2.getCurname()==vertexArray[j].getCurname())
-                break;
-        }
-        if(j==position){
-            vertexArray[position]=v2;
-        }
-    }*/
+
     //利用逆邻接表计算每个点的入度。
     public void indegreeCalculate(){
         for(vertex x:vertexArray){
@@ -111,90 +84,72 @@ public class graph {
             a=a.nextLinknode;
         }
         //删除结点。
-        x.nextNode=null;//删除节点的过程只改变了邻接表，未改变更新逆邻接表，但是更新了入度
+        x.nextNode=null;//删除节点的过程只改变了邻接表，未改变更新逆邻接表，但是更新了入度,刚好逆邻接表用于延调
         Vnumber--;
     }
-    //后调课程
-    /*public void shiftBackCurriculum(String curriculum){
-        vertex x=StringToVetex(curriculum);
-        int i=0;
-        while(zeroStack.peek()!=x){
-            helpList[i]=zeroStack.peek();
-            i++;
-            zeroStack.pop();
+    //拓扑排序
+    public void typo(){
+        Comparator<vertex> cmp = new Comparator<vertex>() {
+            public int compare(vertex a, vertex b) { //这里是大根堆
+                return b.getFavorate()-a.getFavorate(); //第一键值做参考
+            }
+        };
+        Queue<vertex> q = new PriorityQueue<>(cmp);
+        for(vertex x:vertexArray){
+            if(x.indegree==0) {
+                q.add(x);
+                x.setIsNew(0);
+            }
         }
-        helpStack.push(zeroStack.pop());
-        for(int a=i;a<=1;a--){
-            zeroStack.push(helpList[a]);
+        int i=1;
+        Scanner in = new Scanner(System.in);
+        for(i=1;i<=8;i++) {
+            System.out.println("第"+i+"个学期的课程为：");
+            while (!q.isEmpty() && timeNow <= timeLimit) {
+                String a=q.poll().getCurname();
+                deleteVertex(StringToVetex(a));
+                StringToVetex(a).setWhichsemester(i);
+                timeNow+=StringToVetex(a).getGrade()*16;
+                System.out.print(a+" ");
+            }
+            System.out.println("\n请问您是否想延调课程？延调的话请输入1，然后输入延调的门数，然后输入延调课程的名称，各个信息用空格隔开");
+            int isback=in.nextInt();
+            if(isback==0)
+                System.out.println("未选择延调！");
+            else if(isback==1){
+                int backNum=in.nextInt();
+                for(int j=0;j<backNum;j++){
+                    String backName=in.next();
+                    for(vertex c:vertexArray){
+                        vertexLinknode d=c.preNode;
+                        while(d!=null){
+                            if(d.getName()==backName){
+                                c.indegree+=1;
+                                StringToVetex(d.getName()).setIsNew(1);
+                            }
+                            d=d.preLinknode;
+
+                        }
+                    }
+                }
+            }
+            for(vertex x:vertexArray){
+                if(x.indegree==0&&x.getIsNew()==1) {
+                    q.add(x);
+                    x.setIsNew(0);
+                }
+            }
         }
-    }*/
+
+    }
+
+
+
+
     //设置喜爱值
     public void setFavorate(String curriculum,int l){
         StringToVetex(curriculum).setFavorate(l);
     }
-   /* //拓扑排序前的准备，将刚开始入度为0的结点压入zeroStack.
-    public void PreTypo() {
-        for (vertex x : vertexArray) {
-            if (x.indegree == 0)
-                zeroStack.push(x);
-            else
-                x.setStackPosition(1);
-        }
-    }
-    //拓扑排序
-    public void typo(){
-        int i=0;
-        int j=0;
-        while(!zeroStack.empty()){
-            if(zeroStack.peek().getFavorate()!=0){
-                helpLikeList[i]=zeroStack.peek();
-                i++;
-                zeroStack.pop();
-            }
-            else{
-                helpList[j]=zeroStack.pop();
-                j++;
-            }
-        }
-        for(int a=j;a<=1;a--){
-            zeroStack.push(helpList[a]);
-        }
-
-        if(i!=0){
-            int c=i;
-            while(c>0){
-                int min=0;
-                for(int d=1;d<i;d++){
-                    if(helpLikeList[0].getFavorate()>helpLikeList[d].getFavorate())
-                        min=d;
-                }
-                zeroStack.push(helpLikeList[min]);
-            }
-        }
-        //拓扑排序真正的开始
-        int sum=0;
-        while(!zeroStack.empty()&&sum+zeroStack.peek().getGrade()<=gradeLimit){
-            sum=sum+zeroStack.peek().getGrade();
-            deleteVertex(zeroStack.pop());
-            //寻找新产生的入度为0的结点
-            for(vertex e:vertexArray){
-                if(e.indegree ==0&&e.getStackPosition()==1){
-                    helpStack.push(e);
-                }
-            }
-        }
-        //两栈均空，递归结束。
-        if(zeroStack.isEmpty()&&helpStack.isEmpty())
-            return;
-        //将helpStack里的结点压入zeroStack
-        while (!helpStack.empty()){
-            helpStack.peek().setStackPosition(0);
-            zeroStack.push(helpStack.pop());
-        }
-        //递归调用。
-        typo();
-
-    }*/
 
      //根据课程名字返回相应的vertex结点。
     public vertex StringToVetex(String s){
@@ -206,27 +161,21 @@ public class graph {
     }
 
 
-    public int getGradeLimit() {
-        return gradeLimit;
+    public int getTimeLimit() {
+        return timeLimit;
     }
 
     public int getVnumber() {
         return Vnumber;
     }
 
-   /* public Stack<vertex> getHelpStack() {
-        return helpStack;
-    }
 
-    public Stack<vertex> getZeroStack() {
-        return zeroStack;
-    }*/
 
     public void setVnumber(int vnumber) {
         Vnumber = vnumber;
     }
 
-    public void setGradeLimit(int gradeLimit) {
-        this.gradeLimit = gradeLimit;
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
     }
 }
