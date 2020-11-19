@@ -18,6 +18,15 @@ public class vertex {
         whichsemester=9;
         isNew=1;
     }
+    public vertex(){
+        curname="1";
+        this.grade=grade;
+        like=0;
+        nextNode=null;
+        indegree=0;
+        whichsemester=9;
+        isNew=1;
+    }
 //get/set方法。
     public int getGrade() {
         return grade;

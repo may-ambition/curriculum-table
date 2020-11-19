@@ -24,6 +24,19 @@ public class main {
     }
     public static void main(String args[]) {
         System.out.println(getJson());
+        graph g=new graph(15);
+        JSONArray getJsonArray=JSON.parseArray(getJson());
+        for(int i=0;i<getJsonArray.size();i++){
+            JSONObject obj=getJsonArray.getJSONObject(i);
+            g.addEdge(obj.getString("formmer"),obj.getIntValue("grade1"), obj.getString("latter"),obj.getIntValue("geade2") );
+
+            //System.out.print(g.getVertexArray()[0].getCurname()+" ");
+            //System.out.print(g.getPosition());
+        }
+        g.indegreeCalculate();
+        g.typo();
+        //JSONObject obj=getJsonArray.getJSONObject(0);
+        //g.addEdge(obj.getString("formmer"),obj.getIntValue("grade1"), obj.getString("latter"),obj.getIntValue("geade2") );
         /*JSONArray getJsonArray=JSON.parseArray(getJson());
         JSONObject obj=getJsonArray.getJSONObject(0);
         JSONObject obj2=obj.getJSONObject("news");

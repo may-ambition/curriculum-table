@@ -22,11 +22,8 @@ import java.util.*;
 public class graph {
     private vertex[] vertexArray;//vertex类型的顺序表
     private int Vnumber;//顶点数量
-    private int position;//vertexArray里真正存入的课程数。
-    /*private Stack<vertex> zeroStack;//存放当前入度为0的课程，该栈内的课程即为本学期能选的课程
-    private Stack<vertex> helpStack;//辅助栈
-    private vertex[] helpList=new vertex[20];//为了后调课程以及挑选喜爱课程而设置的顺序表，将被调课程或者普通课程压入helpStack,该表存zeroStack中未被后调的结点。
-    private vertex[] helpLikeList=new vertex[20];//将喜爱的课程放入此表，然后按喜爱值再压入zeroStack。*/
+    private int position;
+   // zelpLikeList=new vertex[20];//将喜爱的课程放入此表，然后按喜爱值再压入zeroStack。*/
     private int timeLimit=280;
     private int timeNow=0;
     //构造方法
@@ -43,11 +40,12 @@ public class graph {
         }
         int i;
         for(i=0;i<position;i++){
-            if(a.getCurname()==vertexArray[i].getCurname())
+            if(a.getCurname().equals(vertexArray[i].getCurname()))
                 break;
         }
         if(i==position){
             vertexArray[position]=a;
+            position++;
         }
     }
     //初始化vertexArray,建立邻接链表和逆邻接链表
@@ -58,10 +56,10 @@ public class graph {
         vertexLinknode v4= new vertexLinknode(v2);
         vertexArrayAdd(v1);
         vertexArrayAdd(v2);
-        v4.nextLinknode=StringToVetex(formmer).nextNode;
-        StringToVetex(formmer).nextNode=v4;
-        v3.preLinknode=StringToVetex(latter).preNode;
-        StringToVetex(latter).preNode=v3;
+        v4.nextLinknode=vertexArray[StringToVetex(formmer)].nextNode;
+        vertexArray[StringToVetex(formmer)].nextNode=v4;
+        v3.preLinknode=vertexArray[StringToVetex(latter)].preNode;
+        vertexArray[StringToVetex(latter)].preNode=v3;
     }
 
     //利用逆邻接表计算每个点的入度。
@@ -80,7 +78,7 @@ public class graph {
         x.indegree=-1;
         vertexLinknode a=x.nextNode;
         while(a!=null){
-            StringToVetex(a.getName()).indegree--;
+            vertexArray[StringToVetex(a.getName())].indegree--;
             a=a.nextLinknode;
         }
         //删除结点。
@@ -109,12 +107,12 @@ public class graph {
             System.out.println("第"+i+"个学期的课程为：");
             while (!q.isEmpty() && timeNow <= timeLimit) {
                 String a=q.poll().getCurname();
-                deleteVertex(StringToVetex(a));
-                StringToVetex(a).setWhichsemester(i);
-                timeNow+=StringToVetex(a).getGrade()*16;
+                deleteVertex(vertexArray[StringToVetex(a)]);
+                vertexArray[StringToVetex(a)].setWhichsemester(i);
+                timeNow+=vertexArray[StringToVetex(a)].getGrade()*16;
                 System.out.print(a+" ");
             }
-            System.out.println("\n请问您是否想延调课程？延调的话请输入1，然后输入延调的门数，然后输入延调课程的名称，各个信息用空格隔开");
+            /*System.out.println("\n请问您是否想延调课程？延调的话请输入1，然后输入延调的门数，然后输入延调课程的名称，各个信息用空格隔开");
             int isback=in.nextInt();
             if(isback==0)
                 System.out.println("未选择延调！");
@@ -134,7 +132,7 @@ public class graph {
                         }
                     }
                 }
-            }
+            }*/
             for(vertex x:vertexArray){
                 if(x.indegree==0&&x.getIsNew()==1) {
                     q.add(x);
@@ -150,18 +148,29 @@ public class graph {
 
     //设置喜爱值
     public void setFavorate(String curriculum,int l){
-        StringToVetex(curriculum).setFavorate(l);
+        vertexArray[StringToVetex(curriculum)].setFavorate(l);
     }
 
      //根据课程名字返回相应的vertex结点。
-    public vertex StringToVetex(String s){
+   /* public vertex StringToVetex(String s){
         for(int i=0;i<Vnumber;i++){
             if(vertexArray[i].getCurname()==s)
                 return vertexArray[i];
         }
         return null;
+    }*/
+    public int StringToVetex(String s){
+        for(int i=0;i<Vnumber;i++) {
+            if (vertexArray[i].getCurname().equals(s))
+                return i;
+        }
+        return -1;
+
     }
 
+    public vertex[] getVertexArray() {
+        return vertexArray;
+    }
 
     public int getTimeLimit() {
         return timeLimit;
@@ -179,5 +188,9 @@ public class graph {
 
     public void setTimeLimit(int timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }

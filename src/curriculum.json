@@ -2,7 +2,7 @@
   {
     "formmer": "程序设计",
     "latter": "汇编语言",
-    "grade1": "3",
+    "grade1": "4",
     "geade2": "3"
   },
   {
@@ -14,13 +14,13 @@
   {
     "formmer": "程序设计",
     "latter": "数据结构",
-    "grade1": "3",
+    "grade1": "4",
     "geade2": "3"
   },
   {
     "formmer": "程序设计",
     "latter": "数值分析",
-    "grade1": "3",
+    "grade1": "4",
     "geade2": "2"
   },
   {
@@ -93,6 +93,12 @@
     "formmer": "电路",
     "latter": "计算机组成原理",
     "grade1": "3",
+    "geade2": "4"
+  },
+  {
+    "formmer": "线性代数",
+    "latter": "概率论",
+    "grade1": "4",
     "geade2": "4"
   }
 ]
