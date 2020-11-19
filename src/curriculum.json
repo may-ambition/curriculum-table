@@ -1,0 +1,98 @@
+[
+  {
+    "formmer": "程序设计",
+    "latter": "汇编语言",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "程序设计",
+    "latter": "离散数学",
+    "grade1": "4",
+    "geade2": "3"
+  },
+  {
+    "formmer": "程序设计",
+    "latter": "数据结构",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "程序设计",
+    "latter": "数值分析",
+    "grade1": "3",
+    "geade2": "2"
+  },
+  {
+    "formmer": "汇编语言",
+    "latter": "语言设计与分析",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "语言设计与分析",
+    "latter": "编译原理",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "离散数学",
+    "latter": "数据结构",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "数据结构",
+    "latter": "语言设计与分析",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "数据结构",
+    "latter": "编译原理",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "数据结构",
+    "latter": "操作系统",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "高等数学",
+    "latter": "数值分析",
+    "grade1": "4",
+    "geade2": "2"
+  },
+  {
+    "formmer": "高等数学",
+    "latter": "线性代数",
+    "grade1": "4",
+    "geade2": "4"
+  },
+  {
+    "formmer": "线性代数",
+    "latter": "数值分析",
+    "grade1": "4",
+    "geade2": "2"
+  },
+  {
+    "formmer": "数字逻辑",
+    "latter": "电路",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "普通物理",
+    "latter": "电路",
+    "grade1": "3",
+    "geade2": "3"
+  },
+  {
+    "formmer": "电路",
+    "latter": "计算机组成原理",
+    "grade1": "3",
+    "geade2": "4"
+  }
+]

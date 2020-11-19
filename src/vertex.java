@@ -7,6 +7,7 @@ public class vertex {
     public int indegree;//该节点的入度。当为负一表示其被删除。
     private int whichsemester;
     private int isNew;
+    //private int importance;
 //构造方法
     public vertex(String name,int grade){
         curname=name;
@@ -49,4 +50,12 @@ public class vertex {
     public int getIsNew() {
         return isNew;
     }
+
+   /* public int getImportance() {
+        return importance;
+    }
+
+    public void setImportance(int importance) {
+        this.importance = importance;
+    }*/
 }

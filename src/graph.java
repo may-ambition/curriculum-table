@@ -20,7 +20,7 @@ import java.util.*;
     9.图形界面设计：
  */
 public class graph {
-    private vertex[] vertexArray=new vertex[100];//vertex类型的顺序表
+    private vertex[] vertexArray;//vertex类型的顺序表
     private int Vnumber;//顶点数量
     private int position;//vertexArray里真正存入的课程数。
     /*private Stack<vertex> zeroStack;//存放当前入度为0的课程，该栈内的课程即为本学期能选的课程
@@ -91,6 +91,8 @@ public class graph {
     public void typo(){
         Comparator<vertex> cmp = new Comparator<vertex>() {
             public int compare(vertex a, vertex b) { //这里是大根堆
+                //if(a.getFavorate()==b.getFavorate())
+                    //return b.getImportance()-a.getImportance();//第二键值做参考
                 return b.getFavorate()-a.getFavorate(); //第一键值做参考
             }
         };
