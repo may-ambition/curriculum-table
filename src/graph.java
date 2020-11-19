@@ -23,7 +23,6 @@ public class graph {
     private vertex[] vertexArray;//vertex类型的顺序表
     private int Vnumber;//顶点数量
     private int position;
-   // zelpLikeList=new vertex[20];//将喜爱的课程放入此表，然后按喜爱值再压入zeroStack。*/
     private int timeLimit=280;
     private int timeNow=0;
     //构造方法
@@ -114,7 +113,7 @@ public class graph {
                 System.out.print(a+" ");
             }
             timeNow=0;
-            /*System.out.println("\n请问您是否想延调课程？延调的话请输入1，然后输入延调的门数，然后输入延调课程的名称，各个信息用空格隔开");
+            System.out.println("\n请问您是否想延调课程？延调的话请输入1，然后输入延调的门数，然后输入延调课程的名称，各个信息用空格隔开");
             int isback=in.nextInt();
             if(isback==0)
                 System.out.println("未选择延调！");
@@ -125,16 +124,18 @@ public class graph {
                     for(vertex c:vertexArray){
                         vertexLinknode d=c.preNode;
                         while(d!=null){
-                            if(d.getName()==backName){
+                            if(d.getName().equals(backName)){
                                 c.indegree+=1;
-                                StringToVetex(d.getName()).setIsNew(1);
+                                vertexArray[StringToVetex(d.getName())].setIsNew(1);
                             }
                             d=d.preLinknode;
 
                         }
                     }
+                    vertexArray[StringToVetex(backName)].indegree=0;
+                    vertexArray[StringToVetex(backName)].setIsNew(1);
                 }
-            }*/
+            }
             for(vertex x:vertexArray){
                 if(x.indegree==0&&x.getIsNew()==1) {
                     q.add(x);
@@ -157,14 +158,6 @@ public class graph {
         vertexArray[StringToVetex(curriculum)].setFavorate(l);
     }
 
-     //根据课程名字返回相应的vertex结点。
-   /* public vertex StringToVetex(String s){
-        for(int i=0;i<Vnumber;i++){
-            if(vertexArray[i].getCurname()==s)
-                return vertexArray[i];
-        }
-        return null;
-    }*/
     public int StringToVetex(String s){
         for(int i=0;i<Vnumber;i++) {
             if (vertexArray[i].getCurname().equals(s))
