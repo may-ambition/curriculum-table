@@ -34,6 +34,9 @@ public class main {
             //System.out.print(g.getPosition());
         }
         g.indegreeCalculate();
+        for(vertex x:g.getVertexArray()){
+            System.out.println(x.getCurname()+": "+x.getIndegree());
+        }
         g.typo();
         //JSONObject obj=getJsonArray.getJSONObject(0);
         //g.addEdge(obj.getString("formmer"),obj.getIntValue("grade1"), obj.getString("latter"),obj.getIntValue("geade2") );

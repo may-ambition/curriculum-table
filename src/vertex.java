@@ -60,7 +60,10 @@ public class vertex {
         return isNew;
     }
 
-   /* public int getImportance() {
+    public int getIndegree() {
+        return indegree;
+    }
+    /* public int getImportance() {
         return importance;
     }
 

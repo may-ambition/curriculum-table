@@ -74,16 +74,16 @@ public class graph {
         }
     }
     //删除结点，将其结点入度设为0，并把其邻接表上的结点入度减一。
-    public void deleteVertex(vertex x){
-        x.indegree=-1;
-        vertexLinknode a=x.nextNode;
+    public void deleteVertex(int x){
+        vertexArray[x].indegree=-1;
+        vertexLinknode a=vertexArray[x].nextNode;
         while(a!=null){
             vertexArray[StringToVetex(a.getName())].indegree--;
             a=a.nextLinknode;
         }
         //删除结点。
-        x.nextNode=null;//删除节点的过程只改变了邻接表，未改变更新逆邻接表，但是更新了入度,刚好逆邻接表用于延调
-        Vnumber--;
+        vertexArray[x].nextNode=null;//删除节点的过程只改变了邻接表，未改变更新逆邻接表，但是更新了入度,刚好逆邻接表用于延调
+
     }
     //拓扑排序
     public void typo(){
@@ -107,11 +107,13 @@ public class graph {
             System.out.println("第"+i+"个学期的课程为：");
             while (!q.isEmpty() && timeNow <= timeLimit) {
                 String a=q.poll().getCurname();
-                deleteVertex(vertexArray[StringToVetex(a)]);
+                //System.out.println(a);
+                deleteVertex(StringToVetex(a));
                 vertexArray[StringToVetex(a)].setWhichsemester(i);
                 timeNow+=vertexArray[StringToVetex(a)].getGrade()*16;
                 System.out.print(a+" ");
             }
+            timeNow=0;
             /*System.out.println("\n请问您是否想延调课程？延调的话请输入1，然后输入延调的门数，然后输入延调课程的名称，各个信息用空格隔开");
             int isback=in.nextInt();
             if(isback==0)
@@ -138,6 +140,10 @@ public class graph {
                     q.add(x);
                     x.setIsNew(0);
                 }
+            }
+            System.out.println("");
+            for(vertex x:vertexArray){
+                System.out.println(x.getCurname()+": "+x.getIndegree());
             }
         }
 
@@ -193,4 +199,5 @@ public class graph {
     public int getPosition() {
         return position;
     }
+
 }
